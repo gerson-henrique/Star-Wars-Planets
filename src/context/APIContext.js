@@ -12,7 +12,7 @@ export default function APIContextProvider({ children }) {
   const handleAPI = async () => {
     setLoad(true);
     const results = await getPlanets();
-    setApiResponse(results);
+    setApiResponse(results.results);
     setLoad(false);
   };
 
