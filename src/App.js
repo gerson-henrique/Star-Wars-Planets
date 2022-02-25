@@ -1,9 +1,15 @@
 import React from 'react';
-import './App.css';
+import Table from './components/Table';
+import APIContextProvider from './context/APIContext';
 
 function App() {
   return (
-    <span>Hello, App!</span>
+    <div>
+      <APIContextProvider>
+        <Table />
+      </APIContextProvider>
+    </div>
+
   );
 }
 
