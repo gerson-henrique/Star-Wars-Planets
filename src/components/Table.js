@@ -1,20 +1,35 @@
 import React, { useContext, useEffect } from 'react';
 import { APIContext } from '../context/APIContext';
+import { FilterContext } from '../context/FilterContext';
 
 export default function Table() {
   const { load,
+    setLoad,
     apiResponse,
-    // setApiResponse,
     handleAPI } = useContext(APIContext);
+
+  const { handleNameFilter, filtredRes, filter } = useContext(FilterContext);
 
   useEffect(() => {
     const asyncCall = async () => {
+      setLoad(true);
       await handleAPI();
-      console.log(apiResponse);
-      console.log(load);
     };
     asyncCall();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const asyncCall = async () => {
+      if (apiResponse) {
+        await handleNameFilter(apiResponse);
+        setLoad(false);
+      }
+    };
+    asyncCall();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [apiResponse, filter]);
+
   return (
     <table>
       <thead>
@@ -44,7 +59,7 @@ export default function Table() {
               </td>
             </tr>
           ) : (
-            apiResponse.map((plt, id) => (
+            filtredRes.map((plt, id) => (
               <tr key={ id }>
                 <td>
                   {plt.name}
@@ -87,7 +102,6 @@ export default function Table() {
                 </td>
               </tr>
             ))
-
           )}
       </tbody>
     </table>

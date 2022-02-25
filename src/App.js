@@ -1,12 +1,17 @@
 import React from 'react';
+import Filter from './components/Filter';
 import Table from './components/Table';
 import APIContextProvider from './context/APIContext';
+import FilterContextProvider from './context/FilterContext';
 
 function App() {
   return (
     <div>
       <APIContextProvider>
-        <Table />
+        <FilterContextProvider>
+          <Filter />
+          <Table />
+        </FilterContextProvider>
       </APIContextProvider>
     </div>
 

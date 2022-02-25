@@ -10,14 +10,18 @@ export default function APIContextProvider({ children }) {
   const [apiResponse, setApiResponse] = useState('');
   // functions
   const handleAPI = async () => {
-    setLoad(true);
     const results = await getPlanets();
-    setApiResponse(results.results);
-    setLoad(false);
+    await setApiResponse(results.results);
   };
 
   return (
-    <APIContext.Provider value={ { load, apiResponse, setApiResponse, handleAPI } }>
+    <APIContext.Provider
+      value={ { load,
+        apiResponse,
+        setApiResponse,
+        handleAPI,
+        setLoad } }
+    >
       {children}
     </APIContext.Provider>
   );
