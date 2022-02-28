@@ -11,7 +11,7 @@ export default function APIContextProvider({ children }) {
   // functions
   const handleAPI = async () => {
     const results = await getPlanets();
-    await setApiResponse(results.results);
+    setApiResponse(results.results);
   };
 
   return (
