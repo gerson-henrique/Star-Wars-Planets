@@ -19,7 +19,6 @@ export default function FilterContextProvider({ children }) {
     const name = response.filter((pl) => (
       pl.name.toLowerCase().includes(filter.filterByName.name)));
     setFiltredRes(name);
-    console.log(filtredRes);
   };
 
   return (

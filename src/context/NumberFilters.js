@@ -1,27 +1,57 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { APIContext } from './APIContext';
 
 export const NumberFilterContext = createContext();
 
 export default function NumberFilterContextProvider({ children }) {
+  const { apiResponse, setApiResponse } = useContext(APIContext);
   // states
   const [filterOptions, setFilterOptions] = useState(['population',
     'orbital_period', 'diameter', 'rotation_period', 'surface_water']);
   const [numericValues, setNumericValues] = useState({ filterByNumericValues: [] });
   const [cardActive] = useState(false);
+  const [number, setNumber] = useState(0);
   // functions
-  const createNumericFilterCard = (newObj) => {
+  const handleNumber = ({ target }) => {
+    setNumber(target.value);
+  };
+
+  const numfilter = () => {
+    numericValues.filterByNumericValues.forEach((card) => {
+      switch (card.comparison) {
+      case 'maior que':
+        setApiResponse(apiResponse.filter((plt) => (parseInt(plt[card.column], 10)
+        > card.value)));
+        break;
+
+      case 'menor que':
+        setApiResponse(apiResponse.filter((plt) => (parseInt(plt[card.column], 10)
+        < card.value)));
+        break;
+
+      case 'igual a':
+        setApiResponse(apiResponse.filter((plt) => (parseInt(plt[card.column], 10)
+         === parseInt(card.value, 10))));
+        break;
+
+      default:
+        break;
+      }
+    });
+  };
+  const createNumericFilterCard = async (newObj) => {
     setFilterOptions(
       filterOptions.filter((options) => (options !== newObj.column)),
     );
     setNumericValues({ filterByNumericValues:
       [...numericValues.filterByNumericValues, newObj] });
-    console.log(numericValues);
+
+    numfilter();
   };
 
   const deleteFilterCard = ({ target }) => {
     setFilterOptions([...filterOptions, target.id]);
-    console.log(target.id);
     const removed = numericValues.filterByNumericValues.filter(
       (card) => (card.column !== target.id),
     );
@@ -40,10 +70,18 @@ export default function NumberFilterContextProvider({ children }) {
       value: FIX,
     };
 
-    console.log(newObj);
-
     createNumericFilterCard(newObj);
   };
+
+  useEffect(() => {
+    const asyncCall = async () => {
+      if (numericValues) {
+        numfilter();
+      }
+    };
+    asyncCall();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [numericValues]);
 
   return (
     <NumberFilterContext.Provider
@@ -51,7 +89,10 @@ export default function NumberFilterContextProvider({ children }) {
         numericValues,
         cardActive,
         createNewFilterObj,
-        deleteFilterCard } }
+        deleteFilterCard,
+        numfilter,
+        number,
+        handleNumber } }
     >
       {children}
     </NumberFilterContext.Provider>

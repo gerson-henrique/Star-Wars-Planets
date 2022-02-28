@@ -2,7 +2,9 @@ import React, { useContext } from 'react';
 import { NumberFilterContext } from '../context/NumberFilters';
 
 export default function NumberSelector() {
-  const { filterOptions, createNewFilterObj } = useContext(NumberFilterContext);
+  const { filterOptions,
+    createNewFilterObj,
+    number, handleNumber } = useContext(NumberFilterContext);
   return (
     <div>
       <select id="column" data-testid="column-filter">
@@ -15,7 +17,13 @@ export default function NumberSelector() {
         <option value="menor que">menor que</option>
         <option value="igual a">igual a</option>
       </select>
-      <input id="number" type="number" value="0" data-testid="value-filter" />
+      <input
+        id="number"
+        type="number"
+        value={ number }
+        data-testid="value-filter"
+        onChange={ handleNumber }
+      />
       <button
         type="button"
         disabled={ !filterOptions.length }

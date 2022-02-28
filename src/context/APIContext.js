@@ -6,8 +6,9 @@ export const APIContext = createContext();
 
 export default function APIContextProvider({ children }) {
   // states
-  const [load, setLoad] = useState(true);
+
   const [apiResponse, setApiResponse] = useState('');
+  const [load, setLoad] = useState(true);
   // functions
   const handleAPI = async () => {
     const results = await getPlanets();
